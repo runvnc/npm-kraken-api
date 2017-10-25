@@ -75,6 +75,25 @@ class KrakenClient {
 		this.config = Object.assign({ key, secret }, defaults, options);
 	}
 
+  setNextNonce(nonce) {
+    this.nonce = nonce+"";
+  }
+
+  checkNonce() {
+    let nonce = Date.now().toString();
+    if (this.nonce) nonce = this.nonce;
+    if (!this.lastNonce) {
+      this.lastNonce = nonce;
+      return nonce;
+    }
+   if (nonce*1 <= this.lastNonce*1)
+      throw new Error("Kraken nonce did not increment."+
+                      "last="+this.lastNonce+"curr="+nonce);
+    this.lastNonce = nonce;
+    return nonce;
+  }
+
+
 	/**
 	 * This method makes a public or private API request.
 	 * @param  {String}   method   The API method (public or private)
@@ -93,6 +112,7 @@ class KrakenClient {
 			return this.publicMethod(method, params, callback);
 		}
 		else if(methods.private.includes(method)) {
+      params.nonce = this.checkNonce();
 			return this.privateMethod(method, params, callback);
 		}
 		else {
