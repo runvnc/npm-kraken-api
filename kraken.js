@@ -114,7 +114,7 @@ class KrakenClient {
 			return this.publicMethod(method, params, callback);
 		}
 		else if(methods.private.includes(method)) {
-      if (params) params.nonce = Date.now();// this.checkNonce();
+      if (params) params.nonce = Date.now() * 1000;// this.checkNonce();
 			return this.privateMethod(method, params, callback);
 		}
 		else {
