@@ -1,6 +1,7 @@
 const got    = require('got');
 const crypto = require('crypto');
 const qs     = require('qs');
+const autobind = require('class-autobind').default;
 
 // Public/Private method names
 const methods = {
@@ -73,9 +74,10 @@ class KrakenClient {
 		}
 
 		this.config = Object.assign({ key, secret }, defaults, options);
+    autobind(this);
 	}
 
-  setNextNonce(nonce) {
+  setNextNonce (nonce) {
     this.nonce = nonce+"";
   }
 
@@ -112,7 +114,7 @@ class KrakenClient {
 			return this.publicMethod(method, params, callback);
 		}
 		else if(methods.private.includes(method)) {
-      params.nonce = this.checkNonce();
+      if (params) params.nonce = Date.now();// this.checkNonce();
 			return this.privateMethod(method, params, callback);
 		}
 		else {

@@ -12,6 +12,7 @@
   "contributors": [],
   "license": "MIT",
   "dependencies": {
+    "class-autobind": "^0.1.4",
     "got": "^7.1.0",
     "qs": ">=6.4.0"
   },
